@@ -14,12 +14,17 @@
           placeholder="Full name">
       </div>
       <div class="col-sm-7 col-12">
-        <input
-          type="text"
-          class="form-control"
-          :class="{ 'red-border': $v.tweet.content.$error }"
-          v-model="tweet.content"
-          placeholder="Tweet">
+        <div class="input-group mb-3">
+          <input
+            type="text"
+            class="form-control"
+            :class="{ 'red-border': $v.tweet.content.$error }"
+            v-model="tweet.content"
+            placeholder="Tweet">
+          <div class="input-group-append">
+            <span class="input-group-text">{{ charsLeft }}</span>
+          </div>
+        </div>
       </div>
       <div class="col-sm-2 col-12">
         <button type="submit" class="btn btn-success">Add tweet</button>
@@ -34,7 +39,7 @@
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators'
+import { required, maxLength } from 'vuelidate/lib/validators'
 import TweetService from '@/services/TweetService'
 import store from '@/store'
 
@@ -50,12 +55,18 @@ export default {
         required
       },
       content: {
-        required
+        required,
+        maxLength: maxLength(50)
       }
     }
   },
   created () {
     this.initForm()
+  },
+  computed: {
+    charsLeft () {
+      return 50 - this.tweet.content.length || 0
+    }
   },
   methods: {
     initForm () {
