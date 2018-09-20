@@ -1,5 +1,8 @@
 <template>
-  <table class="table">
+  <div v-if="loading" class="alert alert-warning">
+    Loading..
+  </div>
+  <table class="table" v-else>
     <thead>
       <tr>
         <th scope="col">Name</th>
@@ -29,6 +32,7 @@ import TweetService from '@/services/TweetService'
 export default {
   data () {
     return {
+      loading: true,
       dateSortDir: '-'
     }
   },
@@ -52,9 +56,11 @@ export default {
       return moment(date).format('MM/DD/YYYY HH:mm:ss')
     },
     async getTweets () {
+      this.loading = true
       const params = { ordering: this.dateSortDir + 'created_at' }
       const response = await TweetService.getAll(params)
       store.dispatch('setTweets', response.data)
+      this.loading = false
     }
   }
 }
