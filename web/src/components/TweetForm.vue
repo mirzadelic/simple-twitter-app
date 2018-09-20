@@ -35,7 +35,6 @@
 
 <script>
 import { required } from 'vuelidate/lib/validators'
-import moment from 'moment'
 import TweetService from '@/services/TweetService'
 import store from '@/store'
 
